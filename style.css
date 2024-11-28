@@ -1,0 +1,60 @@
+body {
+  background-image: url("./assets/img/dark-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+header {
+  height: 120px;
+  background-color: rgb(19, 19, 19);
+  display: flex;
+  align-items: center;
+  padding-left: 24px;
+  width: 100%;
+}
+
+.header-logo {
+  width: 240px;
+}
+
+#content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  padding: 24px;
+}
+
+.pokemon-card {
+  width: 200px;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.6);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.pokemon-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+}
+
+.pokemon-card img {
+  width: 120px;
+  height: auto;
+  margin-bottom: 8px;
+}
+
+.pokemon-type {
+  display: inline-block;
+  margin: 4px 4px 0;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: capitalize;
+}

@@ -1,0 +1,72 @@
+/* Farben für die Typen */
+.pokemon-card.grass {
+  background-color: #78c850;
+}
+
+.pokemon-card.fire {
+  background-color: #f08030;
+}
+
+.pokemon-card.water {
+  background-color: #6890f0;
+}
+
+.pokemon-card.electric {
+  background-color: #f8d030;
+}
+
+.pokemon-card.bug {
+  background-color: #a8b820;
+}
+
+.pokemon-card.poison {
+  background-color: #a040a0;
+}
+
+.pokemon-card.flying {
+  background-color: #a890f0;
+}
+
+.pokemon-card.rock {
+  background-color: #b8a038;
+}
+
+.pokemon-card.ghost {
+  background-color: #705898;
+}
+
+.pokemon-card.dragon {
+  background-color: #7038f8;
+}
+
+.pokemon-card.psychic {
+  background-color: #f85888;
+}
+
+.pokemon-card.ice {
+  background-color: #98d8d8;
+}
+
+.pokemon-card.steel {
+  background-color: #b8b8d0;
+}
+
+.pokemon-card.dark {
+  background-color: #705848;
+}
+
+.pokemon-card.fairy {
+  background-color: #ee99ac;
+}
+
+.pokemon-card.fighting {
+  background-color: #c03028;
+}
+
+.pokemon-card.normal {
+  background-color: #a8a878;
+}
+
+.pokemon-card.ground {
+  background-color: #e0c068;
+}
