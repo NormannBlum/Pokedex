@@ -1,56 +1,95 @@
-// "async function" ruft die Daten der Pokemons von der API ab
-async function fetchPokemonData() {
-  // Initialisiere ein leeres Array um die Pokémon-Daten zu speichern
+// "async function" ruft die Daten der Pokémons von der API ab
+async function fetchPokemonData(startIndex, limit) {
+  // Initialisiere ein leeres Array, um die Pokémon-Daten zu speichern
   let pokemonList = [];
 
-  for (let i = 1; i < 20; i++) {
-    // Abrufen der Daten eines Pokémon von der PokeAPI anhand seiner ID.
+  for (let i = startIndex; i < startIndex + limit; i++) {
+    // Abrufen der Daten eines Pokémon von der PokeAPI anhand seiner ID
     let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}`);
 
     // Konvertiere die API-Antwort in ein JSON-Objekt
-    let pokemon = await response.json();
+    let pokemonData = await response.json();
 
-    // Hinzufügen eines Pokemon-Objekts mit Informationen (Name, Typ, Bild, ID) zum Array.
+    // Extrahiere alle Typen des Pokémon
+    let pokemonTypes = [];
+    for (let j = 0; j < pokemonData.types.length; j++) {
+      pokemonTypes.push(pokemonData.types[j].type.name);
+    }
+
+    // Hinzufügen eines Pokémon-Objekts mit Informationen (Name, Typen, Bild, ID) zum Array
     pokemonList.push({
-      name: pokemon.name,
-      type: pokemon.types[0].type.name,
-      image: pokemon.sprites.other["official-artwork"].front_default,
-      id: pokemon.id,
+      name: pokemonData.name,
+      types: pokemonTypes,
+      image: pokemonData.sprites.other["official-artwork"].front_default,
+      id: pokemonData.id,
     });
   }
 
-  renderPokemonCards(pokemonList);
+  // Gibt die Liste der Pokémon-Daten zurück
+  return pokemonList;
 }
 
-// Funktion zur Darstellung der PokemonDaten auf der Webseite.
-function renderPokemonCards(pokemonList) {
+// Funktion zur Darstellung der Pokémon-Daten auf der Webseite
+async function renderPokemonCards(startIndex, limit) {
+  // Ruft die Daten der Pokémon ab
+  let pokemonList = await fetchPokemonData(startIndex, limit);
+
   // Hole das HTML-Element ID "content", wo die Karten eingefügt werden sollen
   let contentElement = document.getElementById("content");
 
-  // Initialisierung eines leeren Strings, der später die HTML-Karten enthält.
-  let cardsHTML = "";
+  // Speichert die bestehenden Karten und fügt die neuen hinzu
+  let cardsHTML = contentElement.innerHTML;
 
-  // Schleife durch die Liste der Pokemon, um jede Karte zu erstellen
+  // Schleife durch die Liste der Pokémon, um jede Karte zu erstellen
   for (let i = 0; i < pokemonList.length; i++) {
-    let pokemon = pokemonList[i]; // Das aktuelle Pokemon
+    let pokemonData = pokemonList[i]; // Das aktuelle Pokémon
 
-    // HTML-Struktur für eine einzelne Pokemon-Karte
+    // Typen-Icons und Typnamen erstellen
+    let typeIconsHTML = "";
+    for (let j = 0; j < pokemonData.types.length; j++) {
+      typeIconsHTML += `
+        <div class="type-info">
+          <img class="type-icon" src="./assets/icons/${pokemonData.types[j]}.png">
+          <span class="type-name">${pokemonData.types[j]}</span>
+        </div>
+      `;
+    }
+
+    // HTML-Struktur für eine einzelne Pokémon-Karte
     cardsHTML += `
-      <div class="pokemon-card ${pokemon.type}"> 
-        <div class="card-header"> 
-          <span class="pokemon-id">#${pokemon.id}</span>
-          <span class="pokemon-name">${pokemon.name}</span> 
+      <div class="pokemon-card ${pokemonData.types[0]}"> 
+        <div class="card-header">
+          <span class="pokemon-name">${pokemonData.name}</span>  
+          <span class="pokemon-id">#${pokemonData.id}</span>
         </div>
         <div class="card-body"> 
-          <img class="pokemon-image" src="${pokemon.image}"> 
+          <img class="pokemon-image" src="${pokemonData.image}" alt="${pokemonData.name}"> 
         </div>
-        <div class="card-footer"> 
-          <img class="type-icon" src="./assets/icons/${pokemon.type}.png">
+        <div class="card-footer">
+          ${typeIconsHTML}
         </div>
       </div>
     `;
   }
 
-  // Fügt den generierten HTML-Code in das "content"-Element ein.
+  // Fügt den generierten HTML-Code in das "content"-Element ein
   contentElement.innerHTML = cardsHTML;
 }
+
+// Anzahl der geladenen Pokemon initialisieren
+let loadedPokemonCount = 0;
+
+// Lädt weitere Pokemon und aktualisiert den Zähler
+function loadMorePokemon() {
+  renderPokemonCards(loadedPokemonCount + 1, 20); // Starte ab dem nächsten Pokémon
+  loadedPokemonCount += 20; // Aktualisiere die Anzahl der geladenen Pokémon
+}
+
+loadMorePokemon();
+
+let loadMoreButton = document.getElementById("load-more-button");
+
+// "Load More"-Button klickbar machen
+loadMoreButton.onclick = function () {
+  loadMorePokemon();
+};
