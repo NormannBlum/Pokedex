@@ -1,17 +1,11 @@
-// "async function" ruft die Daten der Pokémons von der API ab
 async function fetchPokemonData(startIndex, limit) {
-  // Initialisiere ein leeres Array, um die Pokémon-Daten zu speichern
-  let pokemonList = [];
+  let pokemonList = []; // Initialisiere ein leeres Array, um die Pokémon-Daten zu speichern
 
   for (let i = startIndex; i < startIndex + limit; i++) {
-    // Abrufen der Daten eines Pokémon von der PokeAPI anhand seiner ID
     let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}`);
+    let pokemonData = await response.json(); // Konvertiere die API-Antwort in ein JSON-Objekt
 
-    // Konvertiere die API-Antwort in ein JSON-Objekt
-    let pokemonData = await response.json();
-
-    // Extrahiere alle Typen des Pokémon
-    let pokemonTypes = [];
+    let pokemonTypes = []; // Extrahiere alle Typen des Pokémon
     for (let j = 0; j < pokemonData.types.length; j++) {
       pokemonTypes.push(pokemonData.types[j].type.name);
     }
@@ -25,67 +19,31 @@ async function fetchPokemonData(startIndex, limit) {
     });
   }
 
-  // Gibt die Liste der Pokémon-Daten zurück
-  return pokemonList;
+  return pokemonList; // Gibt die Liste der Pokémon-Daten zurück
 }
 
-// Funktion zur Darstellung der Pokémon-Daten auf der Webseite
 async function renderPokemonCards(startIndex, limit) {
-  // Ruft die Daten der Pokémon ab
-  let pokemonList = await fetchPokemonData(startIndex, limit);
+  let pokemonList = await fetchPokemonData(startIndex, limit); // Ruft die Daten der Pokémon ab
+  let contentElement = document.getElementById("content"); // Hole das HTML-Element ID "content"
+  let cardsHTML = contentElement.innerHTML; // Speichert die bestehenden Karten und fügt neue hinzu
 
-  // Hole das HTML-Element ID "content", wo die Karten eingefügt werden sollen
-  let contentElement = document.getElementById("content");
-
-  // Speichert die bestehenden Karten und fügt die neuen hinzu
-  let cardsHTML = contentElement.innerHTML;
-
-  // Schleife durch die Liste der Pokémon, um jede Karte zu erstellen
   for (let i = 0; i < pokemonList.length; i++) {
     let pokemonData = pokemonList[i]; // Das aktuelle Pokémon
-
-    // Typen-Icons und Typnamen erstellen
-    let typeIconsHTML = "";
-    for (let j = 0; j < pokemonData.types.length; j++) {
-      typeIconsHTML += `
-        <div class="type-info">
-          <img class="type-icon" src="./assets/icons/${pokemonData.types[j]}.png">
-          <span class="type-name">${pokemonData.types[j]}</span>
-        </div>
-      `;
-    }
-
-    // HTML-Struktur für eine einzelne Pokémon-Karte
-    cardsHTML += `
-      <div class="pokemon-card ${pokemonData.types[0]}"> 
-        <div class="card-header">
-          <span class="pokemon-name">${pokemonData.name}</span>  
-          <span class="pokemon-id">#${pokemonData.id}</span>
-        </div>
-        <div class="card-body"> 
-          <img class="pokemon-image" src="${pokemonData.image}" alt="${pokemonData.name}"> 
-        </div>
-        <div class="card-footer">
-          ${typeIconsHTML}
-        </div>
-      </div>
-    `;
+    cardsHTML += generatePokemonCardTemplate(pokemonData);
   }
 
-  // Fügt den generierten HTML-Code in das "content"-Element ein
-  contentElement.innerHTML = cardsHTML;
+  contentElement.innerHTML = cardsHTML; // Fügt den HTML-Code in das "content"-Element ein
+
+  loadedPokemonCount += limit; // Aktualisiere Anzahl geladener Pokemon um den Startpunkt zu speichern
 }
 
-// Anzahl der geladenen Pokemon initialisieren
-let loadedPokemonCount = 0;
+let loadedPokemonCount = 1; // Anzahl der geladenen Pokemon initialisieren
 
-// Lädt weitere Pokemon und aktualisiert den Zähler
 function loadMorePokemon() {
-  renderPokemonCards(loadedPokemonCount + 1, 20); // Starte ab dem nächsten Pokémon
-  loadedPokemonCount += 20; // Aktualisiere die Anzahl der geladenen Pokémon
+  renderPokemonCards(loadedPokemonCount, 20); // Lade ab der aktuellen Anzahl von geladenen Pokémon
 }
 
-loadMorePokemon();
+loadMorePokemon(); // Initialer Aufruf, um die ersten Pokemon zu laden
 
 let loadMoreButton = document.getElementById("load-more-button");
 

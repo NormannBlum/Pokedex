@@ -15,7 +15,7 @@ header {
   background-color: rgb(19, 19, 19);
   display: flex;
   align-items: center;
-  padding-left: 24px;
+  padding-left: 30px;
   width: 100%;
 }
 
@@ -71,8 +71,13 @@ header {
 }
 
 .pokemon-image {
-  width: 200px;
+  width: 175px;
   height: auto;
+  transition: width 0.3s ease;
+}
+
+.pokemon-card:hover .pokemon-image {
+  width: 200px;
 }
 
 .card-footer {
@@ -98,31 +103,4 @@ header {
 .type-name {
   font-size: 14px;
   text-transform: capitalize;
-}
-
-.button-container {
-  text-align: center;
-  margin: 20px 0;
-}
-
-#load-more-button {
-  background-color: #6c6f76;
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  padding: 12px 24px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
-  margin-top: 20px;
-}
-
-#load-more-button:hover {
-  background-color: #575a5f;
-  transform: scale(1.05);
-}
-
-#load-more-button:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
 }
