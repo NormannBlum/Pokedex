@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="styles/standart.css" />
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="styles/assets.css" />
+    <link rel="stylesheet" href="styles/overlay.css" />
     <link rel="stylesheet" href="styles/responsive.css" />
     <script src="scripts/template.js"></script>
   </head>
@@ -31,8 +32,23 @@
       </div>
     </main>
 
-    <footer></footer>
+    <div id="overlay" onclick="toggleOverlay(event)">
+      <div class="overlay-content" onclick="event.stopPropagation()">
+        <img id="overlay-img" />
+        <div class="button-container">
+          <button class="nav-button-prev" onclick="prevImage(event)">
+            <img src="./img/arrow_left.png" alt="Previous" />
+          </button>
+          <div class="image-counter" id="image-counter"></div>
+          <button class="nav-button-next" onclick="nextImage(event)">
+            <img src="./img/arrow_right.png" alt="Next" />
+          </button>
+        </div>
+      </div>
+    </div>
 
+    <footer></footer>
+    <script src="scripts/overlay.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

@@ -1,3 +1,7 @@
+let loadedPokemonCount = 1;
+let pokemonListGlobal = [];
+const loadMoreButton = document.getElementById("load-more-button");
+
 async function fetchPokemonData(startIndex, limit) {
   let pokemonList = []; // Initialisiere ein leeres Array, um die Pokémon-Daten zu speichern
 
@@ -24,28 +28,38 @@ async function fetchPokemonData(startIndex, limit) {
 
 async function renderPokemonCards(startIndex, limit) {
   let pokemonList = await fetchPokemonData(startIndex, limit); // Ruft die Daten der Pokémon ab
+  for (let i = 0; i < pokemonList.length; i++) {
+    pokemonListGlobal.push(pokemonList[i]);
+  } // Aktualisiere die globale Pokemon-Liste
   let contentElement = document.getElementById("content"); // Hole das HTML-Element ID "content"
   let cardsHTML = contentElement.innerHTML; // Speichert die bestehenden Karten und fügt neue hinzu
 
   for (let i = 0; i < pokemonList.length; i++) {
-    let pokemonData = pokemonList[i]; // Das aktuelle Pokémon
-    cardsHTML += generatePokemonCardTemplate(pokemonData);
+    cardsHTML += generatePokemonCardTemplate(
+      pokemonList[i],
+      loadedPokemonCount + i
+    );
   }
 
   contentElement.innerHTML = cardsHTML; // Fügt den HTML-Code in das "content"-Element ein
 
-  loadedPokemonCount += limit; // Aktualisiere Anzahl geladener Pokemon um den Startpunkt zu speichern
+  for (let i = loadedPokemonCount; i < loadedPokemonCount + limit; i++) {
+    let card = document.getElementById(`pokemon-card-${i}`);
+    if (card) {
+      card.onclick = function () {
+        openOverlay(i);
+      };
+    }
+  }
+
+  loadedPokemonCount += limit; // Aktualisiere die Anzahl der geladenen Pokemon, um den Startpunkt zu speichern
 }
 
-let loadedPokemonCount = 1; // Anzahl der geladenen Pokemon initialisieren
-
 function loadMorePokemon() {
-  renderPokemonCards(loadedPokemonCount, 20); // Lade ab der aktuellen Anzahl von geladenen Pokémon
+  renderPokemonCards(loadedPokemonCount, 20); // Lade ab der aktuellen Anzahl von geladenen Pokemon
 }
 
 loadMorePokemon(); // Initialer Aufruf, um die ersten Pokemon zu laden
-
-let loadMoreButton = document.getElementById("load-more-button");
 
 // "Load More"-Button klickbar machen
 loadMoreButton.onclick = function () {
