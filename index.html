@@ -27,21 +27,47 @@
     </header>
     <main>
       <div id="content"></div>
-      <div class="button-container">
+      <div class="load-button-container">
         <button id="load-more-button">Load more Pokemon ...</button>
       </div>
     </main>
 
     <div id="overlay" onclick="toggleOverlay(event)">
       <div class="overlay-content" onclick="event.stopPropagation()">
+        <div class="overlay-header">
+          <span id="overlay-pokemon-name"></span>
+          <span id="overlay-pokemon-id"></span>
+        </div>
         <img id="overlay-img" />
+        <div id="overlay-type-icons" class="type-info"></div>
+        <div class="overlay-body">
+          <div class="stats">
+            <table>
+              <tr>
+                <td>Height:</td>
+                <td><span id="overlay-pokemon-height"></span></td>
+              </tr>
+              <tr>
+                <td>Weight:</td>
+                <td><span id="overlay-pokemon-weight"></span></td>
+              </tr>
+              <tr>
+                <td>Base Experience:</td>
+                <td><span id="overlay-pokemon-base-exp"></span></td>
+              </tr>
+              <tr>
+                <td>Abilities:</td>
+                <td><span id="overlay-pokemon-abilities"></span></td>
+              </tr>
+            </table>
+          </div>
+        </div>
         <div class="button-container">
-          <button class="nav-button-prev" onclick="prevImage(event)">
-            <img src="./img/arrow_left.png" alt="Previous" />
+          <button class="nav-button prev" onclick="prevImage(event)">
+            <img src="./assets/icons/arrow-left.svg" alt="Previous" />
           </button>
-          <div class="image-counter" id="image-counter"></div>
-          <button class="nav-button-next" onclick="nextImage(event)">
-            <img src="./img/arrow_right.png" alt="Next" />
+          <button class="nav-button next" onclick="nextImage(event)">
+            <img src="./assets/icons/arrow-right.svg" alt="Next" />
           </button>
         </div>
       </div>

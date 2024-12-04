@@ -1,4 +1,4 @@
-.button-container {
+.load-button-container {
   text-align: center;
   margin: 20px 0;
 }
@@ -33,20 +33,21 @@
   cursor: pointer;
   border-radius: 50%;
   transition: background-color 0.3s, transform 0.2s;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
+  z-index: 1100;
 }
 
-.nav-button.left {
-  left: -60px;
+.nav-button.prev {
+  left: 10px;
 }
 
-.nav-button.right {
-  right: -60px;
+.nav-button.next {
+  right: 10px;
 }
 
 .nav-button:hover {
@@ -59,6 +60,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  margin-top: 20px;
 }
 
 .pokemon-card.grass { background-color: #78c850; }
