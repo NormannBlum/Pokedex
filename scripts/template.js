@@ -16,11 +16,22 @@ function generatePokemonCardTemplate(pokemonData, index) {
           <span class="pokemon-id">#${pokemonData.id}</span>
         </div>
         <div class="card-body"> 
-          <img class="pokemon-image" src="${pokemonData.image}" alt="${pokemonData.name}"> 
+          <img class="pokemon-image" src="${pokemonData.image}"> 
         </div>
         <div class="card-footer">
           ${generateTypeIcons(pokemonData.types)}
         </div>
       </div>`;// Generiert den HTML-Code für eine Pokemon Karte
 }
+
+function generateOverlayTypeIcons(types) {
+  let typeIconsHTML = ""; // Typen-Icons nur für das Overlay erstellen, ohne Namen
+  for (let i = 0; i < types.length; i++) {
+    typeIconsHTML += ` <div class="overlay-type-info">
+            <img class="overlay-type-icon" src="./assets/icons/${types[i]}.png">
+          </div> `;
+  }
+  return typeIconsHTML; // Gibt den HTML-Code für die Pokemon Typen Icons im Overlay zurück
+}
+
 

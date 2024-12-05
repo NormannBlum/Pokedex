@@ -8,8 +8,9 @@ function setBasicOverlayInfo(pokemonData) {
   document.getElementById('overlay-pokemon-id').innerHTML = `#${pokemonData.id}`; 
   document.getElementById('overlay-pokemon-name').innerHTML = pokemonData.name; 
   let typeIconsContainer = document.getElementById('overlay-type-icons'); 
-  typeIconsContainer.innerHTML = generateTypeIcons(pokemonData.types);
+  typeIconsContainer.innerHTML = generateOverlayTypeIcons(pokemonData.types);
 }
+
 
 async function fetchAndSetPokemonDetails(id) {
   const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`); 

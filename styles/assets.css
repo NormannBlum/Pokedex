@@ -27,41 +27,44 @@
 
 .nav-button {
   position: absolute;
-  top: 50%;
+  top: 35%;
   transform: translateY(-50%);
-  background-color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
-  border-radius: 50%;
   transition: background-color 0.3s, transform 0.2s;
-  width: 50px;
-  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
   z-index: 1100;
+  width: 60px; 
+  height: 60px; 
+  background-color: transparent;
 }
 
-.nav-button.prev {
-  left: 10px;
-}
+/* .nav-button.prev {
+  left: 120px;
+/* } */
 
 .nav-button.next {
-  right: 10px;
+  right: 0px;
 }
 
 .nav-button:hover {
-  background-color: rgba(255, 255, 255, 0.8);
-  transform: scale(1.1);
+  background-color:rgb(255 255 255 / 7%)
 }
 
-.button-container {
+.nav-button img {
+  width: 60%; 
+  height: auto;
+}
+
+/* .button-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
   margin-top: 20px;
-}
+} */
 
 .pokemon-card.grass { background-color: #78c850; }
 .pokemon-card.fire { background-color: #ec3a2a; }
