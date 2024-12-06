@@ -18,11 +18,12 @@ async function fetchSinglePokemonData(id) {
   for (let j = 0; j < pokemonData.types.length; j++) {
     pokemonTypes.push(pokemonData.types[j].type.name);
   }
-  return { // Erstelle ein Pokemon-Objekt mit den relevanten Informationen
+  return {
+    // Erstelle ein Pokemon-Objekt mit den relevanten Informationen
     name: pokemonData.name,
     types: pokemonTypes,
     image: pokemonData.sprites.other["official-artwork"].front_default,
-    id: pokemonData.id
+    id: pokemonData.id,
   };
 }
 
@@ -34,14 +35,25 @@ async function renderPokemonCards(startIndex, limit) {
   let contentElement = document.getElementById("content");
   let cardsHTML = contentElement.innerHTML; // Speichert die bestehenden Karten
   for (let i = 0; i < pokemonList.length; i++) {
-    cardsHTML += generatePokemonCardTemplate(pokemonList[i], loadedPokemonCount + i);
+    cardsHTML += generatePokemonCardTemplate(
+      pokemonList[i],
+      loadedPokemonCount + i
+    );
   }
   contentElement.innerHTML = cardsHTML; // Fügt den HTML-Code in das "content"-Element ein
   loadedPokemonCount += limit; // Aktualisiere die Anzahl der geladenen Pokémon
 }
 
 function loadMorePokemon() {
-  renderPokemonCards(loadedPokemonCount, 20); // Lade ab aktueller Anzahl geladener Pokemon
+  const spinner = document.getElementById("loading-spinner");
+  spinner.style.display = "block"; // Spinner anzeigen
+
+  loadMoreButton.disabled = true; // Button deaktivieren
+
+  renderPokemonCards(loadedPokemonCount, 20).then(() => {
+    spinner.style.display = "none"; // Spinner ausblenden, wenn die Karten fertig geladen sind
+    loadMoreButton.disabled = false; // Button wieder aktivieren
+  });
 }
 
 loadMorePokemon();

@@ -11,7 +11,6 @@ function setBasicOverlayInfo(pokemonData) {
   typeIconsContainer.innerHTML = generateOverlayTypeIcons(pokemonData.types);
 }
 
-
 async function fetchAndSetPokemonDetails(id) {
   const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`); 
   const data = await response.json(); 
@@ -64,7 +63,6 @@ function nextImage() {
   fetchAndSetPokemonDetails(pokemonData.id);
 }
 
-// Schließt das Overlay, wenn der Benutzer irgendwo außerhalb des angezeigten Inhalts klickt
 overlay.onclick = function () {
   closeOverlay();
 };
