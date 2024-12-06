@@ -1,0 +1,59 @@
+@media (max-width: 576px) {
+    header {
+        flex-direction: column;
+        align-items: center;
+        height: auto;
+        padding: 20px 15px;
+    }
+
+    .header-logo {
+        margin-bottom: 10px;
+        width: 180px;
+        transition: all 0.3s ease;
+    }
+
+    #search-bar {
+        margin: 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    #search-input {
+        width: 80%;
+        max-width: 250px;
+        font-size: 14px;
+    }
+
+    .overlay-content {
+        width: 90%;
+        max-width: 320px;
+    }
+
+    .overlay-image-container {
+        height: 200px;
+    }
+
+    #overlay-img {
+        width: 200px;
+    }
+
+    .overlay-header {
+        font-size: 16px;
+        padding: 0 10px;
+    }
+
+    .overlay-body-header {
+        font-size: 16px;
+        padding: 8px 0;
+    }
+
+    .overlay-body {
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .overlay-type-icon {
+        width: 30px;
+        height: auto;
+    }
+}

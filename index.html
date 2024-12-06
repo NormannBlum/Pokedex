@@ -18,7 +18,8 @@
     <script src="scripts/template.js"></script>
     <script src="scripts/filternames.js"></script>
   </head>
-  <body onload="fetchPokemonData()">
+
+  <body onload="fetchPokemonData(), loadMorePokemon();">
     <header>
       <img
         class="header-logo"
@@ -32,7 +33,7 @@
           placeholder="Search Pokemon ..."
           onkeyup="searchPokemon()"
         />
-        <!-- <p id="search-hint" style="color: #888;">Min. 3 letters required</p> -->
+        <p id="search-hint">Minimum 3 letters required</p>
       </div>
     </header>
 

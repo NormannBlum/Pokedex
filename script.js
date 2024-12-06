@@ -56,8 +56,6 @@ function loadMorePokemon() {
   });
 }
 
-loadMorePokemon();
-
 // "Load More"-Button klickbar machen
 loadMoreButton.onclick = function () {
   loadMorePokemon();

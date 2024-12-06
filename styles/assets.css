@@ -10,6 +10,12 @@
   width: 200px;
 }
 
+#search-hint {
+  color: #888;
+  font-size: 12px;
+  text-align: center;
+}
+
 .load-button-container {
   text-align: center;
   margin: 20px 0;

@@ -10,7 +10,7 @@ function generateTypeIcons(types) {
 }
 
 function generatePokemonCardTemplate(pokemonData, index) {
-  return `<div class="pokemon-card ${pokemonData.types[0]}" id="pokemon-card-${index}" onclick="openOverlay(${index})"> 
+  return `<div class="pokemon-card ${pokemonData.types[0]}" id="data-${index}" onclick="openOverlay(${index})"> 
         <div class="card-header">
           <span class="pokemon-name">${pokemonData.name}</span>  
           <span class="pokemon-id">#${pokemonData.id}</span>
