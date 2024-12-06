@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="styles/overlay.css" />
     <link rel="stylesheet" href="styles/responsive.css" />
     <script src="scripts/template.js"></script>
+    <script src="scripts/filternames.js"></script>
   </head>
   <body onload="fetchPokemonData()">
     <header>
@@ -24,7 +25,17 @@
         src="./assets/img/pokemon-logo.svg"
         alt="Pokemon Logo"
       />
+      <div id="search-bar">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Search Pokemon ..."
+          onkeyup="searchPokemon()"
+        />
+        <!-- <p id="search-hint" style="color: #888;">Min. 3 letters required</p> -->
+      </div>
     </header>
+
     <main>
       <div id="content"></div>
       <div class="load-button-container">
@@ -41,14 +52,12 @@
         <div class="overlay-image-container">
           <img id="overlay-img" class="overlay-img" />
         </div>
-        <!-- <div class="button-container"> -->
         <button class="nav-button prev" onclick="prevImage()">
           <img src="./assets/icons/arrow-left.svg" alt="Previous" />
         </button>
         <button class="nav-button next" onclick="nextImage(event)">
           <img src="./assets/icons/arrow-right.svg" alt="Next" />
         </button>
-        <!-- </div> -->
         <div class="type-icon-container">
           <div id="overlay-type-icons" class="overlay-type-info"></div>
         </div>
