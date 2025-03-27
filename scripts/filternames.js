@@ -1,5 +1,8 @@
 function searchPokemon() {
-  let searchTerm = document.getElementById("search-input").value.toLowerCase().trim();
+  let searchTerm = document
+    .getElementById("search-input")
+    .value.toLowerCase()
+    .trim();
 
   let hintElement = document.getElementById("search-hint");
   let loadMoreButton = document.getElementById("load-more-button");
@@ -17,7 +20,9 @@ function searchPokemon() {
   hintElement.style.display = "none";
 
   // Filtere die globalen Pokemon nach dem Suchbegriff
-  let filtered = pokemonListGlobal.filter((pokemon) => pokemon.name.includes(searchTerm));
+  let filtered = pokemonListGlobal.filter((pokemon) =>
+    pokemon.name.includes(searchTerm)
+  );
 
   // Zeige nur gefilterte Ergebnisse
   displayPokemonCards(filtered);
@@ -31,6 +36,9 @@ function displayPokemonCards(pokemonArray) {
   contentElement.innerHTML = "";
 
   for (let i = 0; i < pokemonArray.length; i++) {
-    contentElement.innerHTML += generatePokemonCardTemplate(pokemonArray[i], pokemonArray[i].id);
+    contentElement.innerHTML += generatePokemonCardTemplate(
+      pokemonArray[i],
+      pokemonArray[i].id
+    );
   }
 }

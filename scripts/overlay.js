@@ -3,28 +3,36 @@ let currentIndex = 0; // Speichert die Position des aktuell angezeigten Bildes -
 const overlay = document.getElementById("overlay");
 const overlayImg = document.getElementById("overlay-img");
 
-function setBasicOverlayInfo(pokemonData) { 
-  overlayImg.src = pokemonData.image; 
-  document.getElementById('overlay-pokemon-id').innerHTML = `#${pokemonData.id}`; 
-  document.getElementById('overlay-pokemon-name').innerHTML = pokemonData.name; 
-  let typeIconsContainer = document.getElementById('overlay-type-icons'); 
+function setBasicOverlayInfo(pokemonData) {
+  overlayImg.src = pokemonData.image;
+  document.getElementById(
+    "overlay-pokemon-id"
+  ).innerHTML = `#${pokemonData.id}`;
+  document.getElementById("overlay-pokemon-name").innerHTML = pokemonData.name;
+  let typeIconsContainer = document.getElementById("overlay-type-icons");
   typeIconsContainer.innerHTML = generateOverlayTypeIcons(pokemonData.types);
 }
 
 async function fetchAndSetPokemonDetails(id) {
-  const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`); 
-  const data = await response.json(); 
-  document.getElementById('overlay-pokemon-height').innerHTML = `${data.height / 10} m`; 
-  document.getElementById('overlay-pokemon-weight').innerHTML = `${data.weight / 10} kg`; 
-  document.getElementById('overlay-pokemon-base-exp').innerHTML = data.base_experience; 
+  const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+  const data = await response.json();
+  document.getElementById("overlay-pokemon-height").innerHTML = `${
+    data.height / 10
+  } m`;
+  document.getElementById("overlay-pokemon-weight").innerHTML = `${
+    data.weight / 10
+  } kg`;
+  document.getElementById("overlay-pokemon-base-exp").innerHTML =
+    data.base_experience;
   let abilities = ""; // Initialisiert leeren String für die Fähigkeiten des Pokemon
-  for (let i = 0; i < data.abilities.length; i++) { // Iteriert durch alle Fähigkeiten des Pokemon
+  for (let i = 0; i < data.abilities.length; i++) {
+    // Iteriert durch alle Fähigkeiten des Pokemon
     if (i > 0) {
       abilities += ", "; // Fügt ein Komma hinzu, wenn es mehr als eine Fähigkeit gibt
     }
-    abilities += data.abilities[i].ability.name; 
+    abilities += data.abilities[i].ability.name;
   }
-  document.getElementById('overlay-pokemon-abilities').innerHTML = abilities;
+  document.getElementById("overlay-pokemon-abilities").innerHTML = abilities;
 }
 
 async function openOverlay(index) {

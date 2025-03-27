@@ -10,7 +10,9 @@ function generateTypeIcons(types) {
 }
 
 function generatePokemonCardTemplate(pokemonData, index) {
-  return `<div class="pokemon-card ${pokemonData.types[0]}" id="data-${index}" onclick="openOverlay(${index})"> 
+  return `<div class="pokemon-card ${
+    pokemonData.types[0]
+  }" id="data-${index}" onclick="openOverlay(${index})"> 
         <div class="card-header">
           <span class="pokemon-name">${pokemonData.name}</span>  
           <span class="pokemon-id">#${pokemonData.id}</span>
@@ -21,7 +23,7 @@ function generatePokemonCardTemplate(pokemonData, index) {
         <div class="card-footer">
           ${generateTypeIcons(pokemonData.types)}
         </div>
-      </div>`;// Generiert den HTML-Code für eine Pokemon Karte
+      </div>`; // Generiert den HTML-Code für eine Pokemon Karte
 }
 
 function generateOverlayTypeIcons(types) {
@@ -33,5 +35,3 @@ function generateOverlayTypeIcons(types) {
   }
   return typeIconsHTML; // Gibt den HTML-Code für die Pokemon Typen Icons im Overlay zurück
 }
-
-
