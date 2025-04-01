@@ -8,26 +8,21 @@ function searchPokemon() {
   let loadMoreButton = document.getElementById("load-more-button");
   if (!hintElement || !loadMoreButton) return;
 
-  // Wenn weniger als 3 Zeichen eingegeben werden, zeige alle Pokemon an und den Hinweis.
   if (searchTerm.length < 3) {
     displayPokemonCards(pokemonListGlobal);
-    hintElement.style.display = "block"; // Hinweis anzeigen
-    loadMoreButton.style.display = "block"; // Load More Button anzeigen
+    hintElement.style.display = "block";
+    loadMoreButton.style.display = "block";
     return;
   }
 
-  // Verstecke den Hinweis, wenn genug Zeichen eingegeben wurden
   hintElement.style.display = "none";
 
-  // Filtere die globalen Pokemon nach dem Suchbegriff
   let filtered = pokemonListGlobal.filter((pokemon) =>
     pokemon.name.includes(searchTerm)
   );
 
-  // Zeige nur gefilterte Ergebnisse
   displayPokemonCards(filtered);
 
-  // Verstecke den Load More Button während der Filterung
   loadMoreButton.style.display = "none";
 }
 

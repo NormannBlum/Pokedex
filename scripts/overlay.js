@@ -1,4 +1,4 @@
-let currentIndex = 0; // Speichert die Position des aktuell angezeigten Bildes - Start bei 0
+let currentIndex = 0;
 
 const overlay = document.getElementById("overlay");
 const overlayImg = document.getElementById("overlay-img");
@@ -24,11 +24,10 @@ async function fetchAndSetPokemonDetails(id) {
   } kg`;
   document.getElementById("overlay-pokemon-base-exp").innerHTML =
     data.base_experience;
-  let abilities = ""; // Initialisiert leeren String für die Fähigkeiten des Pokemon
+  let abilities = "";
   for (let i = 0; i < data.abilities.length; i++) {
-    // Iteriert durch alle Fähigkeiten des Pokemon
     if (i > 0) {
-      abilities += ", "; // Fügt ein Komma hinzu, wenn es mehr als eine Fähigkeit gibt
+      abilities += ", ";
     }
     abilities += data.abilities[i].ability.name;
   }
@@ -36,24 +35,24 @@ async function fetchAndSetPokemonDetails(id) {
 }
 
 async function openOverlay(index) {
-  currentIndex = index - 1; // Passe Index für das Array an, um auf den richtigen Wert zuzugreifen
+  currentIndex = index - 1;
   const pokemonData = pokemonListGlobal[currentIndex];
   setBasicOverlayInfo(pokemonData);
   await fetchAndSetPokemonDetails(pokemonData.id);
   overlay.style.display = "flex";
-  document.body.style.overflow = "hidden"; // Deaktiviere das Scrollen im Hintergrund
+  document.body.style.overflow = "hidden";
 }
 
 function closeOverlay() {
   overlay.style.display = "none";
-  document.body.style.overflow = "auto"; // Reaktiviere das Scrollen im Hintergrund
+  document.body.style.overflow = "auto";
 }
 
 function prevImage() {
   if (currentIndex - 1 < 0) {
-    currentIndex = pokemonListGlobal.length - 1; // Zum letzten Bild der Liste springen
+    currentIndex = pokemonListGlobal.length - 1;
   } else {
-    currentIndex = currentIndex - 1; // Zum vorherigen Bild gehen
+    currentIndex = currentIndex - 1;
   }
   const pokemonData = pokemonListGlobal[currentIndex];
   setBasicOverlayInfo(pokemonData);
@@ -62,9 +61,9 @@ function prevImage() {
 
 function nextImage() {
   if (currentIndex + 1 >= pokemonListGlobal.length) {
-    currentIndex = 0; // Zum Anfang der Liste springen
+    currentIndex = 0;
   } else {
-    currentIndex = currentIndex + 1; // Zum nächsten Bild gehen
+    currentIndex = currentIndex + 1;
   }
   const pokemonData = pokemonListGlobal[currentIndex];
   setBasicOverlayInfo(pokemonData);
