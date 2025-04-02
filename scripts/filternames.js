@@ -1,3 +1,8 @@
+/**
+ * Filters the global Pokémon list based on user input in the search field.
+ * Displays matching Pokémon cards or resets to full list if input is too short.
+ * Also handles hint visibility and toggles the "Load more" button.
+ */
 function searchPokemon() {
   let searchTerm = document
     .getElementById("search-input")
@@ -26,6 +31,11 @@ function searchPokemon() {
   loadMoreButton.style.display = "none";
 }
 
+/**
+ * Renders an array of Pokémon objects as cards into the content container.
+ *
+ * @param {Object[]} pokemonArray - Array of Pokémon data to render.
+ */
 function displayPokemonCards(pokemonArray) {
   let contentElement = document.getElementById("content");
   contentElement.innerHTML = "";

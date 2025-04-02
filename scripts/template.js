@@ -1,3 +1,9 @@
+/**
+ * Generates HTML string for displaying Pokémon type icons inside a card.
+ *
+ * @param {string[]} types - An array of Pokémon type names (e.g., ['fire', 'flying']).
+ * @returns {string} HTML string containing type icon elements.
+ */
 function generateTypeIcons(types) {
   let typeIconsHTML = "";
   for (let i = 0; i < types.length; i++) {
@@ -9,6 +15,13 @@ function generateTypeIcons(types) {
   return typeIconsHTML;
 }
 
+/**
+ * Generates a complete HTML card for a single Pokémon.
+ *
+ * @param {Object} pokemonData - Pokémon object containing name, types, image, and ID.
+ * @param {number} index - Index used to uniquely identify the card and for overlay logic.
+ * @returns {string} HTML string for the Pokémon card.
+ */
 function generatePokemonCardTemplate(pokemonData, index) {
   return `<div class="pokemon-card ${
     pokemonData.types[0]
@@ -26,6 +39,12 @@ function generatePokemonCardTemplate(pokemonData, index) {
       </div>`;
 }
 
+/**
+ * Generates HTML string for displaying type icons inside the Pokémon detail overlay.
+ *
+ * @param {string[]} types - An array of Pokémon type names.
+ * @returns {string} HTML string of overlay-specific type icons.
+ */
 function generateOverlayTypeIcons(types) {
   let typeIconsHTML = "";
   for (let i = 0; i < types.length; i++) {
