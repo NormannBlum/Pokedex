@@ -1,7 +1,30 @@
+/**
+ * Tracks the number of Pokémon currently loaded.
+ * Starts at 1 to avoid API errors (Pokémon IDs start from 1).
+ * @type {number}
+ */
 let loadedPokemonCount = 1;
+
+/**
+ * Global list storing all loaded Pokémon data.
+ * Used for rendering and filtering.
+ * @type {Array<Object>}
+ */
 let pokemonListGlobal = [];
+
+/**
+ * Button element used to trigger loading more Pokémon.
+ * @type {HTMLButtonElement}
+ */
 const loadMoreButton = document.getElementById("load-more-button");
 
+/**
+ * Fetches a list of Pokémon data from the API based on a given range.
+ *
+ * @param {number} startIndex - The starting index of the Pokémon to fetch.
+ * @param {number} limit - The number of Pokémon to fetch.
+ * @returns {Promise<Array<Object>>} A promise that resolves to a list of Pokémon objects.
+ */
 async function fetchPokemonData(startIndex, limit) {
   let pokemonList = [];
   for (let i = startIndex; i < startIndex + limit; i++) {
@@ -11,6 +34,12 @@ async function fetchPokemonData(startIndex, limit) {
   return pokemonList;
 }
 
+/**
+ * Fetches a single Pokémon's data from the API by ID.
+ *
+ * @param {number} id - The Pokémon ID to fetch.
+ * @returns {Promise<Object>} A promise that resolves to a simplified Pokémon object.
+ */
 async function fetchSinglePokemonData(id) {
   let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
   let pokemonData = await response.json();
@@ -26,6 +55,14 @@ async function fetchSinglePokemonData(id) {
   };
 }
 
+/**
+ * Renders Pokémon cards into the DOM based on fetched data.
+ * Updates the global list and the inner HTML of the content container.
+ *
+ * @param {number} startIndex - The starting index for fetching Pokémon.
+ * @param {number} limit - The number of Pokémon to load and render.
+ * @returns {Promise<void>} A promise that resolves when rendering is complete.
+ */
 async function renderPokemonCards(startIndex, limit) {
   let pokemonList = await fetchPokemonData(startIndex, limit);
   for (let i = 0; i < pokemonList.length; i++) {
@@ -43,6 +80,10 @@ async function renderPokemonCards(startIndex, limit) {
   loadedPokemonCount += limit;
 }
 
+/**
+ * Loads more Pokémon by triggering the rendering function and showing a loading spinner.
+ * Disables the load button during the fetch and re-enables it afterward.
+ */
 function loadMorePokemon() {
   const spinner = document.getElementById("loading-spinner");
   spinner.style.display = "block";
@@ -55,6 +96,9 @@ function loadMorePokemon() {
   });
 }
 
+/**
+ * Assigns the click handler to the "Load more" button to trigger Pokémon loading.
+ */
 loadMoreButton.onclick = function () {
   loadMorePokemon();
 };
