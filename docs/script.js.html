@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: script.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: script.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Tracks the number of Pokémon currently loaded.
+ * Starts at 1 to avoid API errors (Pokémon IDs start from 1).
+ * @type {number}
+ */
+let loadedPokemonCount = 1;
+
+/**
+ * Global list storing all loaded Pokémon data.
+ * Used for rendering and filtering.
+ * @type {Array&lt;Object>}
+ */
+let pokemonListGlobal = [];
+
+/**
+ * Button element used to trigger loading more Pokémon.
+ * @type {HTMLButtonElement}
+ */
+const loadMoreButton = document.getElementById("load-more-button");
+
+/**
+ * Fetches a list of Pokémon data from the API based on a given range.
+ *
+ * @param {number} startIndex - The starting index of the Pokémon to fetch.
+ * @param {number} limit - The number of Pokémon to fetch.
+ * @returns {Promise&lt;Array&lt;Object>>} A promise that resolves to a list of Pokémon objects.
+ */
+async function fetchPokemonData(startIndex, limit) {
+  let pokemonList = [];
+  for (let i = startIndex; i &lt; startIndex + limit; i++) {
+    let pokemon = await fetchSinglePokemonData(i);
+    pokemonList.push(pokemon);
+  }
+  return pokemonList;
+}
+
+/**
+ * Fetches a single Pokémon's data from the API by ID.
+ *
+ * @param {number} id - The Pokémon ID to fetch.
+ * @returns {Promise&lt;Object>} A promise that resolves to a simplified Pokémon object.
+ */
+async function fetchSinglePokemonData(id) {
+  let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+  let pokemonData = await response.json();
+  let pokemonTypes = [];
+  for (let j = 0; j &lt; pokemonData.types.length; j++) {
+    pokemonTypes.push(pokemonData.types[j].type.name);
+  }
+  return {
+    name: pokemonData.name,
+    types: pokemonTypes,
+    image: pokemonData.sprites.other["official-artwork"].front_default,
+    id: pokemonData.id,
+  };
+}
+
+/**
+ * Renders Pokémon cards into the DOM based on fetched data.
+ * Updates the global list and the inner HTML of the content container.
+ *
+ * @param {number} startIndex - The starting index for fetching Pokémon.
+ * @param {number} limit - The number of Pokémon to load and render.
+ * @returns {Promise&lt;void>} A promise that resolves when rendering is complete.
+ */
+async function renderPokemonCards(startIndex, limit) {
+  let pokemonList = await fetchPokemonData(startIndex, limit);
+  for (let i = 0; i &lt; pokemonList.length; i++) {
+    pokemonListGlobal.push(pokemonList[i]);
+  }
+  let contentElement = document.getElementById("content");
+  let cardsHTML = contentElement.innerHTML;
+  for (let i = 0; i &lt; pokemonList.length; i++) {
+    cardsHTML += generatePokemonCardTemplate(
+      pokemonList[i],
+      loadedPokemonCount + i
+    );
+  }
+  contentElement.innerHTML = cardsHTML;
+  loadedPokemonCount += limit;
+}
+
+/**
+ * Loads more Pokémon by triggering the rendering function and showing a loading spinner.
+ * Disables the load button during the fetch and re-enables it afterward.
+ */
+function loadMorePokemon() {
+  const spinner = document.getElementById("loading-spinner");
+  spinner.style.display = "block";
+
+  loadMoreButton.disabled = true;
+
+  renderPokemonCards(loadedPokemonCount, 20).then(() => {
+    spinner.style.display = "none";
+    loadMoreButton.disabled = false;
+  });
+}
+
+/**
+ * Assigns the click handler to the "Load more" button to trigger Pokémon loading.
+ */
+loadMoreButton.onclick = function () {
+  loadMorePokemon();
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#closeOverlay">closeOverlay</a></li><li><a href="global.html#currentIndex">currentIndex</a></li><li><a href="global.html#displayPokemonCards">displayPokemonCards</a></li><li><a href="global.html#fetchAndSetPokemonDetails">fetchAndSetPokemonDetails</a></li><li><a href="global.html#fetchPokemonData">fetchPokemonData</a></li><li><a href="global.html#fetchSinglePokemonData">fetchSinglePokemonData</a></li><li><a href="global.html#generateOverlayTypeIcons">generateOverlayTypeIcons</a></li><li><a href="global.html#generatePokemonCardTemplate">generatePokemonCardTemplate</a></li><li><a href="global.html#generateTypeIcons">generateTypeIcons</a></li><li><a href="global.html#loadMoreButton">loadMoreButton</a></li><li><a href="global.html#loadMorePokemon">loadMorePokemon</a></li><li><a href="global.html#loadedPokemonCount">loadedPokemonCount</a></li><li><a href="global.html#nextImage">nextImage</a></li><li><a href="global.html#openOverlay">openOverlay</a></li><li><a href="global.html#overlay">overlay</a></li><li><a href="global.html#overlayImg">overlayImg</a></li><li><a href="global.html#pokemonListGlobal">pokemonListGlobal</a></li><li><a href="global.html#prevImage">prevImage</a></li><li><a href="global.html#renderPokemonCards">renderPokemonCards</a></li><li><a href="global.html#searchPokemon">searchPokemon</a></li><li><a href="global.html#setBasicOverlayInfo">setBasicOverlayInfo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Apr 04 2025 07:14:21 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

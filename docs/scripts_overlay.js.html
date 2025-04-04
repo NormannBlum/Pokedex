@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: scripts/overlay.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: scripts/overlay.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Index of the currently displayed Pokémon in the global list.
+ * @type {number}
+ */
+let currentIndex = 0;
+
+/**
+ * DOM element representing the overlay container.
+ * @type {HTMLElement}
+ */
+const overlay = document.getElementById("overlay");
+
+/**
+ * DOM element representing the Pokémon image inside the overlay.
+ * @type {HTMLImageElement}
+ */
+const overlayImg = document.getElementById("overlay-img");
+
+/**
+ * Sets the basic Pokémon information (image, name, ID, types) in the overlay.
+ *
+ * @param {Object} pokemonData - The basic data of the Pokémon.
+ * @param {string} pokemonData.image - URL to the Pokémon's image.
+ * @param {number} pokemonData.id - The Pokémon's ID.
+ * @param {string} pokemonData.name - The Pokémon's name.
+ * @param {string[]} pokemonData.types - Array of Pokémon type names.
+ */
+function setBasicOverlayInfo(pokemonData) {
+  overlayImg.src = pokemonData.image;
+  document.getElementById(
+    "overlay-pokemon-id"
+  ).innerHTML = `#${pokemonData.id}`;
+  document.getElementById("overlay-pokemon-name").innerHTML = pokemonData.name;
+  const typeIconsContainer = document.getElementById("overlay-type-icons");
+  typeIconsContainer.innerHTML = generateOverlayTypeIcons(pokemonData.types);
+}
+
+/**
+ * Fetches additional Pokémon details (height, weight, base experience, abilities)
+ * from the API and sets them in the overlay.
+ *
+ * @param {number} id - The ID of the Pokémon to fetch details for.
+ * @returns {Promise&lt;void>}
+ */
+async function fetchAndSetPokemonDetails(id) {
+  const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+  const data = await response.json();
+
+  document.getElementById("overlay-pokemon-height").innerHTML = `${
+    data.height / 10
+  } m`;
+  document.getElementById("overlay-pokemon-weight").innerHTML = `${
+    data.weight / 10
+  } kg`;
+  document.getElementById("overlay-pokemon-base-exp").innerHTML =
+    data.base_experience;
+
+  let abilities = "";
+  for (let i = 0; i &lt; data.abilities.length; i++) {
+    if (i > 0) abilities += ", ";
+    abilities += data.abilities[i].ability.name;
+  }
+  document.getElementById("overlay-pokemon-abilities").innerHTML = abilities;
+}
+
+/**
+ * Opens the overlay for a selected Pokémon by index and loads its data.
+ *
+ * @param {number} index - 1-based index of the Pokémon in the global list.
+ * @returns {Promise&lt;void>}
+ */
+async function openOverlay(index) {
+  currentIndex = index - 1;
+  const pokemonData = pokemonListGlobal[currentIndex];
+  setBasicOverlayInfo(pokemonData);
+  await fetchAndSetPokemonDetails(pokemonData.id);
+  overlay.style.display = "flex";
+  document.body.style.overflow = "hidden";
+}
+
+/**
+ * Closes the Pokémon overlay and resets body scroll behavior.
+ */
+function closeOverlay() {
+  overlay.style.display = "none";
+  document.body.style.overflow = "auto";
+}
+
+/**
+ * Navigates to the previous Pokémon in the list and updates the overlay.
+ */
+function prevImage() {
+  currentIndex =
+    (currentIndex - 1 + pokemonListGlobal.length) % pokemonListGlobal.length;
+  const pokemonData = pokemonListGlobal[currentIndex];
+  setBasicOverlayInfo(pokemonData);
+  fetchAndSetPokemonDetails(pokemonData.id);
+}
+
+/**
+ * Navigates to the next Pokémon in the list and updates the overlay.
+ */
+function nextImage() {
+  currentIndex = (currentIndex + 1) % pokemonListGlobal.length;
+  const pokemonData = pokemonListGlobal[currentIndex];
+  setBasicOverlayInfo(pokemonData);
+  fetchAndSetPokemonDetails(pokemonData.id);
+}
+
+/**
+ * Closes the overlay when the background is clicked.
+ */
+overlay.onclick = function () {
+  closeOverlay();
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#closeOverlay">closeOverlay</a></li><li><a href="global.html#currentIndex">currentIndex</a></li><li><a href="global.html#displayPokemonCards">displayPokemonCards</a></li><li><a href="global.html#fetchAndSetPokemonDetails">fetchAndSetPokemonDetails</a></li><li><a href="global.html#fetchPokemonData">fetchPokemonData</a></li><li><a href="global.html#fetchSinglePokemonData">fetchSinglePokemonData</a></li><li><a href="global.html#generateOverlayTypeIcons">generateOverlayTypeIcons</a></li><li><a href="global.html#generatePokemonCardTemplate">generatePokemonCardTemplate</a></li><li><a href="global.html#generateTypeIcons">generateTypeIcons</a></li><li><a href="global.html#loadMoreButton">loadMoreButton</a></li><li><a href="global.html#loadMorePokemon">loadMorePokemon</a></li><li><a href="global.html#loadedPokemonCount">loadedPokemonCount</a></li><li><a href="global.html#nextImage">nextImage</a></li><li><a href="global.html#openOverlay">openOverlay</a></li><li><a href="global.html#overlay">overlay</a></li><li><a href="global.html#overlayImg">overlayImg</a></li><li><a href="global.html#pokemonListGlobal">pokemonListGlobal</a></li><li><a href="global.html#prevImage">prevImage</a></li><li><a href="global.html#renderPokemonCards">renderPokemonCards</a></li><li><a href="global.html#searchPokemon">searchPokemon</a></li><li><a href="global.html#setBasicOverlayInfo">setBasicOverlayInfo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Apr 04 2025 07:14:21 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
