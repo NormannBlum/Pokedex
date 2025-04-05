@@ -27,10 +27,13 @@ const loadMoreButton = document.getElementById("load-more-button");
  */
 async function fetchPokemonData(startIndex, limit) {
   let pokemonList = [];
+
+  // Loop through the given range and fetch each Pokémon individually
   for (let i = startIndex; i < startIndex + limit; i++) {
     let pokemon = await fetchSinglePokemonData(i);
     pokemonList.push(pokemon);
   }
+
   return pokemonList;
 }
 
@@ -41,12 +44,17 @@ async function fetchPokemonData(startIndex, limit) {
  * @returns {Promise<Object>} A promise that resolves to a simplified Pokémon object.
  */
 async function fetchSinglePokemonData(id) {
+  // Make the API request
   let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
   let pokemonData = await response.json();
+
+  // Extract type names into an array
   let pokemonTypes = [];
   for (let j = 0; j < pokemonData.types.length; j++) {
     pokemonTypes.push(pokemonData.types[j].type.name);
   }
+
+  // Return a simplified Pokémon object
   return {
     name: pokemonData.name,
     types: pokemonTypes,
@@ -64,19 +72,30 @@ async function fetchSinglePokemonData(id) {
  * @returns {Promise<void>} A promise that resolves when rendering is complete.
  */
 async function renderPokemonCards(startIndex, limit) {
+  // Fetch Pokémon data for the given range
   let pokemonList = await fetchPokemonData(startIndex, limit);
+
+  // Add new Pokémon to the global list
   for (let i = 0; i < pokemonList.length; i++) {
     pokemonListGlobal.push(pokemonList[i]);
   }
+
+  // Select the content container and prepare to append cards
   let contentElement = document.getElementById("content");
   let cardsHTML = contentElement.innerHTML;
+
+  // Generate HTML for each new Pokémon card
   for (let i = 0; i < pokemonList.length; i++) {
     cardsHTML += generatePokemonCardTemplate(
       pokemonList[i],
-      loadedPokemonCount + i
+      loadedPokemonCount + i // Unique index for overlay functionality
     );
   }
+
+  // Update the DOM with the new cards
   contentElement.innerHTML = cardsHTML;
+
+  // Update the global counter for how many Pokémon are loaded
   loadedPokemonCount += limit;
 }
 
@@ -86,11 +105,16 @@ async function renderPokemonCards(startIndex, limit) {
  */
 function loadMorePokemon() {
   const spinner = document.getElementById("loading-spinner");
+
+  // Show loading animation
   spinner.style.display = "block";
 
+  // Disable the button to prevent double-clicks
   loadMoreButton.disabled = true;
 
+  // Load and render next set of Pokémon
   renderPokemonCards(loadedPokemonCount, 20).then(() => {
+    // Hide spinner and re-enable button when done
     spinner.style.display = "none";
     loadMoreButton.disabled = false;
   });
