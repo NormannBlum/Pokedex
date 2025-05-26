@@ -1,60 +1,59 @@
 /**
- * Tracks the number of Pokémon currently loaded.
- * Starts at 1 to avoid API errors (Pokémon IDs start from 1).
+ * Tracks the total number of Pokémon that have been loaded and displayed.
+ * It's initialized to 1 because Pokémon API IDs start from 1.
+ * This counter is used as the starting index for fetching subsequent batches.
  * @type {number}
  */
 let loadedPokemonCount = 1;
 
 /**
- * Global list storing all loaded Pokémon data.
- * Used for rendering and filtering.
- * @type {Array<Object>}
+ * A global array that accumulates all fetched Pokémon data objects.
+ * This list is used for rendering and filtering operations, serving as the
+ * client-side source of truth once Pokémon are loaded.
+ * @type {Array<object>}
  */
 let pokemonListGlobal = [];
 
 /**
- * Button element used to trigger loading more Pokémon.
+ * A reference to the "Load More" button DOM element.
  * @type {HTMLButtonElement}
  */
 const loadMoreButton = document.getElementById("load-more-button");
 
 /**
- * Fetches a list of Pokémon data from the API based on a given range.
+ * Fetches data for a batch of Pokémon from the PokeAPI within a specified range.
+ * This function orchestrates multiple individual fetches by repeatedly calling `WorkspaceSinglePokemonData`.
  *
- * @param {number} startIndex - The starting index of the Pokémon to fetch.
- * @param {number} limit - The number of Pokémon to fetch.
- * @returns {Promise<Array<Object>>} A promise that resolves to a list of Pokémon objects.
+ * @async
+ * @param {number} startIndex - The Pokédex ID to start fetching from.
+ * @param {number} limit - The number of Pokémon to fetch in this batch.
+ * @returns {Promise<Array<object>>} A promise that resolves to an array of simplified Pokémon data objects.
  */
 async function fetchPokemonData(startIndex, limit) {
   let pokemonList = [];
-
-  // Loop through the given range and fetch each Pokémon individually
   for (let i = startIndex; i < startIndex + limit; i++) {
     let pokemon = await fetchSinglePokemonData(i);
     pokemonList.push(pokemon);
   }
-
   return pokemonList;
 }
 
 /**
- * Fetches a single Pokémon's data from the API by ID.
+ * Fetches raw data for a single Pokémon by its ID from the PokeAPI and transforms it
+ * into a simplified, structured object suitable for this application.
  *
- * @param {number} id - The Pokémon ID to fetch.
- * @returns {Promise<Object>} A promise that resolves to a simplified Pokémon object.
+ * @async
+ * @param {number} id - The Pokédex ID of the Pokémon to fetch.
+ * @returns {Promise<object>} A promise that resolves to a simplified Pokémon object
+ * containing name, types, image, and id.
  */
 async function fetchSinglePokemonData(id) {
-  // Make the API request
   let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
   let pokemonData = await response.json();
-
-  // Extract type names into an array
   let pokemonTypes = [];
   for (let j = 0; j < pokemonData.types.length; j++) {
     pokemonTypes.push(pokemonData.types[j].type.name);
   }
-
-  // Return a simplified Pokémon object
   return {
     name: pokemonData.name,
     types: pokemonTypes,
@@ -64,64 +63,50 @@ async function fetchSinglePokemonData(id) {
 }
 
 /**
- * Renders Pokémon cards into the DOM based on fetched data.
- * Updates the global list and the inner HTML of the content container.
+ * Fetches and renders a new batch of Pokémon cards into the DOM.
+ * It updates the global Pokémon list, generates the HTML for the new cards,
+ * appends them to the content container, and updates the loaded Pokémon count.
  *
- * @param {number} startIndex - The starting index for fetching Pokémon.
+ * @async
+ * @param {number} startIndex - The starting Pokédex ID for fetching the new batch.
  * @param {number} limit - The number of Pokémon to load and render.
- * @returns {Promise<void>} A promise that resolves when rendering is complete.
+ * @returns {Promise<void>} A promise that resolves when the rendering process is complete.
  */
 async function renderPokemonCards(startIndex, limit) {
-  // Fetch Pokémon data for the given range
   let pokemonList = await fetchPokemonData(startIndex, limit);
-
-  // Add new Pokémon to the global list
   for (let i = 0; i < pokemonList.length; i++) {
     pokemonListGlobal.push(pokemonList[i]);
   }
-
-  // Select the content container and prepare to append cards
   let contentElement = document.getElementById("content");
   let cardsHTML = contentElement.innerHTML;
-
-  // Generate HTML for each new Pokémon card
   for (let i = 0; i < pokemonList.length; i++) {
     cardsHTML += generatePokemonCardTemplate(
       pokemonList[i],
-      loadedPokemonCount + i // Unique index for overlay functionality
+      loadedPokemonCount + i
     );
   }
-
-  // Update the DOM with the new cards
   contentElement.innerHTML = cardsHTML;
-
-  // Update the global counter for how many Pokémon are loaded
   loadedPokemonCount += limit;
 }
 
 /**
- * Loads more Pokémon by triggering the rendering function and showing a loading spinner.
- * Disables the load button during the fetch and re-enables it afterward.
+ * Handles the "Load More" button click event.
+ * It manages the UI state by showing a loading spinner and disabling the button
+ * to prevent concurrent fetches. Once the new Pokémon are rendered, it resets the UI.
  */
 function loadMorePokemon() {
   const spinner = document.getElementById("loading-spinner");
-
-  // Show loading animation
   spinner.style.display = "block";
-
-  // Disable the button to prevent double-clicks
   loadMoreButton.disabled = true;
-
-  // Load and render next set of Pokémon
   renderPokemonCards(loadedPokemonCount, 20).then(() => {
-    // Hide spinner and re-enable button when done
     spinner.style.display = "none";
     loadMoreButton.disabled = false;
   });
 }
 
 /**
- * Assigns the click handler to the "Load more" button to trigger Pokémon loading.
+ * Assigns the primary click event handler to the "Load More" button,
+ * linking it to the `loadMorePokemon` function.
  */
 loadMoreButton.onclick = function () {
   loadMorePokemon();
