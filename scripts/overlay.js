@@ -1,74 +1,64 @@
 /**
- * Index of the currently displayed Pokémon in the global list.
+ * Stores the 0-based index of the currently displayed Pokémon from the `pokemonListGlobal` array.
+ * This variable is updated during navigation (next/previous).
  * @type {number}
  */
 let currentIndex = 0;
 
 /**
- * DOM element representing the overlay container.
+ * A reference to the main overlay container DOM element.
+ * This element acts as the parent for all detailed Pokémon views.
  * @type {HTMLElement}
  */
 const overlay = document.getElementById("overlay");
 
 /**
- * DOM element representing the Pokémon image inside the overlay.
+ * A reference to the `<img>` DOM element within the overlay,
+ * used to display the current Pokémon's image.
  * @type {HTMLImageElement}
  */
 const overlayImg = document.getElementById("overlay-img");
 
 /**
- * Sets the basic Pokémon information (image, name, ID, types) in the overlay.
+ * Populates the overlay with the basic, initially-loaded information of a Pokémon.
+ * This includes setting the image, name, ID, and type icons.
  *
- * @param {Object} pokemonData - The basic data of the Pokémon.
- * @param {string} pokemonData.image - URL to the Pokémon's image.
- * @param {number} pokemonData.id - The Pokémon's ID.
- * @param {string} pokemonData.name - The Pokémon's name.
- * @param {string[]} pokemonData.types - Array of Pokémon type names.
+ * @param {object} pokemonData - The basic data object for a single Pokémon.
+ * @param {string} pokemonData.image - The URL to the Pokémon's primary image.
+ * @param {number} pokemonData.id - The Pokédex ID of the Pokémon.
+ * @param {string} pokemonData.name - The name of the Pokémon.
+ * @param {string[]} pokemonData.types - An array of strings representing the Pokémon's types.
  */
 function setBasicOverlayInfo(pokemonData) {
-  // Set Pokémon image in overlay
   overlayImg.src = pokemonData.image;
-
-  // Display Pokémon ID with a "#" prefix
   document.getElementById(
     "overlay-pokemon-id"
   ).innerHTML = `#${pokemonData.id}`;
-
-  // Display Pokémon name
   document.getElementById("overlay-pokemon-name").innerHTML = pokemonData.name;
-
-  // Generate and insert type icons into the overlay
   const typeIconsContainer = document.getElementById("overlay-type-icons");
   typeIconsContainer.innerHTML = generateOverlayTypeIcons(pokemonData.types);
 }
 
 /**
- * Fetches additional Pokémon details (height, weight, base experience, abilities)
- * from the API and sets them in the overlay.
+ * Asynchronously fetches detailed Pokémon information (like height, weight, abilities)
+ * from the PokeAPI for a specific Pokémon ID and updates the corresponding overlay elements.
  *
- * @param {number} id - The ID of the Pokémon to fetch details for.
- * @returns {Promise<void>}
+ * @async
+ * @param {number} id - The Pokédex ID of the Pokémon for which to fetch details.
+ * @returns {Promise<void>} A promise that resolves when the details have been fetched and set.
  */
 async function fetchAndSetPokemonDetails(id) {
-  // Fetch detailed Pokémon data from the API
   const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
   const data = await response.json();
 
-  // Display Pokémon height in meters (converted from decimeters)
   document.getElementById("overlay-pokemon-height").innerHTML = `${
     data.height / 10
   } m`;
-
-  // Display Pokémon weight in kilograms (converted from hectograms)
   document.getElementById("overlay-pokemon-weight").innerHTML = `${
     data.weight / 10
   } kg`;
-
-  // Display base experience value
   document.getElementById("overlay-pokemon-base-exp").innerHTML =
     data.base_experience;
-
-  // Format and display Pokémon abilities as a comma-separated list
   let abilities = "";
   for (let i = 0; i < data.abilities.length; i++) {
     if (i > 0) abilities += ", ";
@@ -78,69 +68,61 @@ async function fetchAndSetPokemonDetails(id) {
 }
 
 /**
- * Opens the overlay for a selected Pokémon by index and loads its data.
+ * Opens and populates the Pokémon detail overlay.
+ * It sets the global `currentIndex`, calls functions to load basic and detailed data,
+ * and makes the overlay visible while preventing the background from scrolling.
  *
- * @param {number} index - 1-based index of the Pokémon in the global list.
- * @returns {Promise<void>}
+ * @async
+ * @param {number} index - The 1-based index of the selected Pokémon in the `pokemonListGlobal` array.
+ * @returns {Promise<void>} A promise that resolves once the overlay is fully open and populated.
  */
 async function openOverlay(index) {
-  // Convert to 0-based index and save it
   currentIndex = index - 1;
-
-  // Get basic Pokémon data from the global list
   const pokemonData = pokemonListGlobal[currentIndex];
-
-  // Display basic Pokémon info (image, name, types, etc.)
   setBasicOverlayInfo(pokemonData);
-
-  // Fetch and display additional data like height and abilities
   await fetchAndSetPokemonDetails(pokemonData.id);
-
-  // Show the overlay and prevent background scrolling
   overlay.style.display = "flex";
   document.body.style.overflow = "hidden";
 }
 
 /**
- * Closes the Pokémon overlay and resets body scroll behavior.
+ * Hides the Pokémon detail overlay and restores the default scrolling behavior
+ * on the main page body.
  */
 function closeOverlay() {
-  // Hide the overlay
   overlay.style.display = "none";
-
-  // Allow page scrolling again
   document.body.style.overflow = "auto";
 }
 
 /**
- * Navigates to the previous Pokémon in the list and updates the overlay.
+ * Navigates to the previous Pokémon in the `pokemonListGlobal` list.
+ * It calculates the new index with wrap-around logic (circular navigation)
+ * and updates the overlay with the data of the previous Pokémon.
  */
 function prevImage() {
-  // Calculate index of the previous Pokémon, wrapping around if needed
   currentIndex =
     (currentIndex - 1 + pokemonListGlobal.length) % pokemonListGlobal.length;
-
-  // Get and display the previous Pokémon
   const pokemonData = pokemonListGlobal[currentIndex];
   setBasicOverlayInfo(pokemonData);
   fetchAndSetPokemonDetails(pokemonData.id);
 }
 
 /**
- * Navigates to the next Pokémon in the list and updates the overlay.
+ * Navigates to the next Pokémon in the `pokemonListGlobal` list.
+ * It calculates the new index with wrap-around logic (circular navigation)
+ * and updates the overlay with the data of the next Pokémon.
  */
 function nextImage() {
-  // Calculate index of the next Pokémon, wrapping around if needed
   currentIndex = (currentIndex + 1) % pokemonListGlobal.length;
-
-  // Get and display the next Pokémon
   const pokemonData = pokemonListGlobal[currentIndex];
   setBasicOverlayInfo(pokemonData);
   fetchAndSetPokemonDetails(pokemonData.id);
 }
 
 /**
- * Closes the overlay when the background is clicked.
+ * Assigns a click event listener to the overlay background.
+ * Clicking anywhere on the overlay (but outside the content box due to event propagation)
+ * will trigger the `closeOverlay` function.
  */
 overlay.onclick = function () {
   closeOverlay();
